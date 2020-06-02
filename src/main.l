@@ -7,9 +7,40 @@ void yyerror(char *);
 
 %}
 
-
 %%
- 
+
+[0-9]+ {
+  return Num;
+}
+
+[+] {
+  return *yytext;
+}
+
+[*] {
+  return *yytext;
+}
+
+[/] {
+  return *yytext;
+}
+
+[\^] {
+  return *yytext;
+}
+
+[(] {
+  return *yytext;
+}
+
+[)] {
+  return *yytext;
+}
+
+[[:space]] ;
+[\n]+ ;
+. ;
+
 %%
 
 int yywrap() {

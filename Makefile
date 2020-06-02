@@ -1,6 +1,6 @@
 # Macros para compilacao
 CC = gcc
-CFLAGS = -Wextra -lfl
+CFLAGS = -Wextra -ll
 DIR = src
 FILENAME = $(DIR)/main.c
 YYTABH = $(DIR)/y.tab.h
