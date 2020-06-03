@@ -1,0 +1,6 @@
+src/y.tab.c
+src/y.tab.h
+src/lex.yy.c
+main
+src/*.o
+*.zip
