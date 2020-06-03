@@ -26,7 +26,7 @@ OP:
   | '+' {};
 
 %%
-void yyerror(char *s) {
+void yyerror() {
   printf("invalido");
 }
 

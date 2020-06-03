@@ -1,6 +1,8 @@
 # Macros para compilacao
 CC = gcc
-CFLAGS = -Wextra -ll
+UNAME_S := $(shell uname -s)
+CFLAGS_LINUX = -Wextra -lfl
+CFLAGS_OSX = -Wextra -ll
 DIR = src
 FILENAME = $(DIR)/main.c
 YYTABH = $(DIR)/y.tab.h
@@ -30,7 +32,12 @@ EXTENSIONS = *.c *.h *.in *.out *.sh
 all:$(TARGET)
 
 $(TARGET):$(LEXOUT) $(YYTABC)
-	$(CC) -o$(TARGET) $(LEXOUT) $(YYTABC) $(CFLAGS)
+ifeq ($(UNAME_S),Linux)
+	$(CC) -o$(TARGET) $(LEXOUT) $(YYTABC) $(CFLAGS_LINUX)
+endif
+ifeq ($(UNAME_S),Darwin)
+	$(CC) -o$(TARGET) $(LEXOUT) $(YYTABC) $(CFLAGS_OSX)
+endif
 
 $(LEXOUT):$(LEXFILE) $(YYTABC)
 	$(LEX) -o$(LEXOUT) $(LEXFILE)
