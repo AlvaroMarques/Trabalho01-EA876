@@ -8,9 +8,16 @@ int yylex(void);
 %token Num '+' '*' '/' '^' '(' ')';
 %%
 S:
-  S E {printf("final: %d\n", $2);}
+  E S {printf("final: %d\n", $2);}
   |
   ;
+
+E:
+  E {}
+  | Num {}
+  | '(' {}
+  | Num '+' {}
+  | Num '*' {}
 
 %%
 void yyerror(char *s) {
@@ -18,6 +25,8 @@ void yyerror(char *s) {
 
 int main() {
   yyparse();
-    return 0;
+
+
+  return 0;
 
 }
