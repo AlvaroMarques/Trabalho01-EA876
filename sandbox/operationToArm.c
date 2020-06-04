@@ -80,9 +80,20 @@ int detachValueNumberList (NumberList * head){
 	free(freedom);
 	return tmp;
 }
+
+int gotoNextNumberList(NumberList *head){
+	if (head == NULL) return -1;
+	if (head->next == NULL) return -1;
+	int ret = head->next->value; 
+	head->previous = head->next;
+	head->next = head->next->next;
+	return ret;
+}
+
 int gotoPreviousNumberList(NumberList *head){
 	if (head == NULL) return EOE;
 	int ret = head->previous->value; 
+	head->next = head->previous;
 	head->previous = head->previous->previous;
 	return ret;
 }
@@ -111,9 +122,19 @@ void addToOperatorList(OperatorList * head, Operator value){
 	head->previous = new;
 }
 
+Operator gotoNextOperatorList(OperatorList *head){
+	if (head == NULL) return EOE;
+	if (head->next == NULL) return EOE;
+	Operator ret = head->next->value; 
+	head->previous = head->next;
+	head->next = head->next->next;
+	return ret;
+}
+
 Operator gotoPreviousOperatorList(OperatorList *head){
 	if (head == NULL) return EOE;
 	Operator ret = head->previous->value; 
+	head->next = head->previous;
 	head->previous = head->previous->previous;
 	return ret;
 }
@@ -158,6 +179,39 @@ void showExpression(Operation * head){
 	showExpression(head->next);
 }
 
+
+void printOperator(Operator operator){
+	switch (operator){
+		case ADD:
+			printf(" + ");
+			break;
+		case MUL:
+			printf(" * ");
+			break;
+		case DIV:
+			printf(" / ");
+			break;
+		case EXP:
+			printf(" ^ ");
+			break;
+		case EOE:
+			printf(";");
+			break;
+		default:
+			printf("..");
+			break;
+	}
+}
+void printOperatorList(OperatorList *start){
+	if (start->previous == NULL) {
+		printf("\n");
+		return;
+	}
+	printOperator(start->previous->value);
+	printOperatorList(start->previous);
+
+}
+
 int solveExpression(Operation * head){
 	NumberList * headNumber = createNumberPointer();
 	OperatorList * headOperator = createOperatorPointer();
@@ -172,44 +226,34 @@ int solveExpression(Operation * head){
 		addToNumberList(headNumber,p->value);
 		addToOperatorList(headOperator,p->operator);
 	}
-	detachValueOperatorList(headOperator);
-	int init = detachValueNumberList(headNumber);
-	while (headNumber->previous != NULL){
-		Operator tmp = detachValueOperatorList(headOperator);
-		switch (tmp){
-			case ADD:
-				init += detachValueNumberList(headNumber);
-				break;
-			case MUL:
-				init *= detachValueNumberList(headNumber);
-				break;
-			case DIV:
-				init /= detachValueNumberList(headNumber);
-				break;
-			case EXP:
-				init = pow(detachValueNumberList(headNumber),init);
-				break;
-			case EOE:
-				printf("algo estranho aqui: %d\n",detachValueNumberList(headNumber));
-				break;
-			default:
-				printf("[default] algo estranho aqui: %d\n",detachValueNumberList(headNumber));
-				break;
-		}
+	int init = 0;
+	int tmp;
+	Operator optmp;
+	while (headNumber->previous->previous != NULL){
+		tmp = gotoPreviousNumberList(headNumber);
+		optmp = gotoPreviousOperatorList(headOperator);
+		printOperatorList(debug);
+		if (optmp == EXP) {
+			headNumber->previous->value = pow(headNumber->previous->value, tmp);
+			headNumber->previous->next->value = 1;
+			headOperator->previous->value = MUL;  // trocando A ^ Y por (A^Y) x 1
+		}		
+
 	}
-	return init;
+	
+	
+
+	
+	return 0;
 }
 
 
 int main(){
 	Operation * o = createHead(EOE);
 	Operation *p;
-	p = addOperationSolving(o, 10, ADD);  
-	p = addOperation(p, 5, ADD);
-	p = addOperation(p, 2, ADD);
-	p = addOperation(p, -1, EOE);
-	p = addOperationSolving(p, 3, ADD);
-	p = addOperation(p, 5, EOE);
+	p = addOperationSolving(o, 3, MUL);  
+	p = addOperation(p, 5, EXP);  
+	p = addOperation(p, 2, EOE);  
 
 	showExpression(o);
 	printf("\n");
