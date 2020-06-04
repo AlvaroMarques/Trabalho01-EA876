@@ -50,60 +50,81 @@ Operation * addOperation(Operation *head, int value, Operator op){
 	return operation;
 }   
 
-typedef struct NumberStack {
-	struct NumberStack * previous;
+typedef struct NumberList {
+	struct NumberList * next;
+	struct NumberList * previous;
 	int value;
-} NumberStack;
+} NumberList;
 
-NumberStack * createNumberStack(){
-	NumberStack * head = malloc(sizeof(NumberStack));
+NumberList * createNumberPointer(){
+	NumberList * head = malloc(sizeof(NumberList));
 	head->value = -1;
 	head->previous = NULL;
+	head->next=NULL;
 	return head;
 }
 
-void addToNumberStack(NumberStack * head, int value){
-	NumberStack * new = malloc(sizeof(NumberStack));	
+void addToNumberList(NumberList * head, int value){
+	NumberList * new = malloc(sizeof(NumberList));	
 	new->value  = value;
 	new->previous = head->previous;
+	if (head->previous != NULL)
+		head->previous->next = new;
 	head->previous = new;
 }
 
-int detachValueNumberStack (NumberStack * head){
-	NumberStack * freedom = head->previous;
+int detachValueNumberList (NumberList * head){
+	NumberList * freedom = head->previous;
 	int tmp = freedom->value;
 	head->previous = freedom->previous;
 	free(freedom);
 	return tmp;
 }
+int gotoPreviousNumberList(NumberList *head){
+	if (head == NULL) return EOE;
+	int ret = head->previous->value; 
+	head->previous = head->previous->previous;
+	return ret;
+}
 
 
-typedef struct OperatorStack {
-	struct OperatorStack * previous;
-	Operator value;
-} OperatorStack;
-OperatorStack * createOperatorStack(){
-	OperatorStack * head = malloc(sizeof(OperatorStack));
+typedef struct OperatorList {
+	struct OperatorList * next;
+	struct OperatorList * previous;
+	int value;
+} OperatorList;
+
+OperatorList * createOperatorPointer(){
+	OperatorList * head = malloc(sizeof(OperatorList));
 	head->value = EOE;
 	head->previous = NULL;
+	head->next=NULL;
 	return head;
 }
 
-void addToOperatorStack(OperatorStack * head, int value){
-	OperatorStack * new = malloc(sizeof(OperatorStack));	
+void addToOperatorList(OperatorList * head, Operator value){
+	OperatorList * new = malloc(sizeof(OperatorList));	
 	new->value  = value;
 	new->previous = head->previous;
+	if (head->previous != NULL)
+		head->previous->next = new;
 	head->previous = new;
 }
 
-int detachValueOperatorStack (OperatorStack * head){
-	OperatorStack * freedom = head->previous;
+Operator gotoPreviousOperatorList(OperatorList *head){
+	if (head == NULL) return EOE;
+	Operator ret = head->previous->value; 
+	head->previous = head->previous->previous;
+	return ret;
+}
+
+int detachValueOperatorList (OperatorList * head){
+	OperatorList * freedom = head->previous;
 	Operator tmp = freedom->value;
 	head->previous = freedom->previous;
 	free(freedom);
 	return tmp;
 }
-
 
 void showExpression(Operation * head){
 	if (head == NULL) return;
@@ -138,8 +159,8 @@ void showExpression(Operation * head){
 }
 
 int solveExpression(Operation * head){
-	NumberStack * headNumber = createNumberStack();
-	OperatorStack * headOperator = createOperatorStack();
+	NumberList * headNumber = createNumberPointer();
+	OperatorList * headOperator = createOperatorPointer();
 	if (head->solving != NULL){
 		head->value = solveExpression(head->solving);
 	}
@@ -148,32 +169,31 @@ int solveExpression(Operation * head){
 		if (p->solving != NULL){
 			p->value = solveExpression(p->solving);
 		}	
-		addToNumberStack(headNumber,p->value);
-		addToOperatorStack(headOperator,p->operator);
-		
+		addToNumberList(headNumber,p->value);
+		addToOperatorList(headOperator,p->operator);
 	}
-	detachValueOperatorStack(headOperator);
-	int init = detachValueNumberStack(headNumber);
+	detachValueOperatorList(headOperator);
+	int init = detachValueNumberList(headNumber);
 	while (headNumber->previous != NULL){
-		Operator tmp = detachValueOperatorStack(headOperator);
+		Operator tmp = detachValueOperatorList(headOperator);
 		switch (tmp){
 			case ADD:
-				init += detachValueNumberStack(headNumber);
+				init += detachValueNumberList(headNumber);
 				break;
 			case MUL:
-				init *= detachValueNumberStack(headNumber);
+				init *= detachValueNumberList(headNumber);
 				break;
 			case DIV:
-				init /= detachValueNumberStack(headNumber);
+				init /= detachValueNumberList(headNumber);
 				break;
 			case EXP:
-				init = pow(detachValueNumberStack(headNumber),init);
+				init = pow(detachValueNumberList(headNumber),init);
 				break;
 			case EOE:
-				printf("algo estranho aqui: %d\n",detachValueNumberStack(headNumber));
+				printf("algo estranho aqui: %d\n",detachValueNumberList(headNumber));
 				break;
 			default:
-				printf("[default] algo estranho aqui: %d\n",detachValueNumberStack(headNumber));
+				printf("[default] algo estranho aqui: %d\n",detachValueNumberList(headNumber));
 				break;
 		}
 	}
