@@ -181,18 +181,25 @@ int main(){
     // operacoes* auxConta = populaprox(1, ADD, conta, direita);
     // auxConta = populaprox(1, EOE, auxConta, direita);
 
-    operacoes* conta = criaLista(-1, MULT);
-    operacoes* auxConta = populaprox(2, ADD, conta, parentese);
-    auxConta = populaprox(5, EOE, auxConta, direita);
-    auxConta = populaprox(-1, EOE, conta, direita);
-    auxConta = populaprox(3, EXP, auxConta, parentese);
-    auxConta = populaprox(2, EOE, auxConta, direita);
+    // operacoes* conta = criaLista(-1, MULT);
+    // operacoes* auxConta = populaprox(2, ADD, conta, parentese);
+    // auxConta = populaprox(5, EOE, auxConta, direita);
+    // auxConta = populaprox(-1, EOE, conta, direita);
+    // auxConta = populaprox(3, EXP, auxConta, parentese);
+    // auxConta = populaprox(2, EOE, auxConta, direita);
 
     // operacoes* conta = criaLista(-1, ADD);
     // operacoes* auxConta = populaprox(1, EOE, conta, parentese);
     // auxConta = populaprox(-1, EOE, conta, direita);
     // auxConta = populaprox(1, EOE, auxConta, parentese);
-    
+
+    operacoes* conta = criaLista(-1, EOE);
+    operacoes* auxConta = populaprox(-1, EOE, conta, parentese);
+    auxConta = populaprox(-1, EOE, auxConta, parentese);
+    auxConta = populaprox(-1, EOE, auxConta, parentese);
+    auxConta = populaprox(-1, EOE, auxConta, parentese);
+    auxConta = populaprox(5, ADD, auxConta, parentese);
+     auxConta = populaprox(5, EOE, auxConta, direita);
 
     printaTudo(conta);
     printf("\n");
