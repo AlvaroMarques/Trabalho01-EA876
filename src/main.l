@@ -38,6 +38,9 @@ void yyerror(char *);
   return *yytext;
 }
 
+<<EOF>> {
+  return EndOF;
+}
 [[:space]] ;
 [\n]+ ;
 . ;
