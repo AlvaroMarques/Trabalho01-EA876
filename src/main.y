@@ -41,7 +41,7 @@ E:
   ;
 
 %%
-void yyerror(char *s) {
+void yyerror() {
 }
 
 int main() {
