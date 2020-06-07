@@ -136,7 +136,7 @@ int resolveShiftReduce(operacoes *cabeca){
 }
 
 pilhaOperacoes *criarPilha(operacoes *o){
-	pilhaOperacoes *p = malloc(pilhaOperacoes);
+	pilhaOperacoes *p = malloc(sizeof(pilhaOperacoes));
 	p->anterior = NULL;
 	p->op = o;
 }
@@ -148,7 +148,7 @@ void adicionaPilha(pilhaOperacoes *pilha, operacoes *op){
 }
 
 operacoes *tiraDaPilha(pilhaOperacoes *pilha){
-	operacoes* tmp = pilha->anterior;
+	pilhaOperacoes * tmp = pilha->anterior;
 	pilha->anterior = tmp->anterior;
 	return tmp;
 }
