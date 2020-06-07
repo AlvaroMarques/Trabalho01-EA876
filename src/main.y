@@ -36,7 +36,7 @@ E:
   | ')' '^' {tiraDaPilha(cabeca);
               cabeca->anterior->operacao->op = EXP;}
   | ')' EndOF {}
-  | Num EndOF {verifica($1, ADD);}
+  | Num EndOF {verifica($1, EOE);}
   ;
 
 %%
@@ -78,6 +78,7 @@ void verifica(int num, operadores op){
     return;
   } 
   operacao = populaprox(num, op, tiraDaPilha(cabeca), paren);
+  adicionaPilha(cabeca, operacao);
   if (num == -1){
       paren = parentese;
     }
