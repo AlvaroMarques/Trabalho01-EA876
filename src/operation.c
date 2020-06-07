@@ -135,6 +135,23 @@ int resolveShiftReduce(operacoes *cabeca){
     return -2;
 }
 
+pilhaOperacoes *criarPilha(operacoes *o){
+	pilhaOperacoes *p = malloc(pilhaOperacoes);
+	p->anterior = NULL;
+	p->op = o;
+}
+
+void adicionaPilha(pilhaOperacoes *pilha, operacoes *op){
+	pilhaOperacoes *n = criarPilha(op);
+	n->anterior = pilha->anterior;
+	pilha->anterior = n;
+}
+
+operacoes *tiraDaPilha(pilhaOperacoes *pilha){
+	operacoes* tmp = pilha->anterior;
+	pilha->anterior = tmp->anterior;
+	return tmp;
+}
 
 char printaOperador(operadores op){
     switch (op)

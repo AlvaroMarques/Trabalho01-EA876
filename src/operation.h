@@ -19,6 +19,17 @@ typedef struct operacoes{
     struct operacoes *cima;
 } operacoes;
 
+typedef struct pilhaOperacoes{
+	operacoes * op;
+	struct pilhaOperacoes *anterior;
+}pilhaOperacoes;
+
+pilhaOperacoes *criarPilha();
+
+void adicionaPilha(pilhaOperacoes *pilha, operacoes *op);
+
+operacoes *tiraDaPilha(pilhaOperacoes *pilha);
+
 operacoes *criaLista(int valor, operadores op);
 
 operacoes *populaprox(int valor, operadores op, operacoes *cabeca, int flag);
