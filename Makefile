@@ -10,6 +10,8 @@ YYTABC = $(DIR)/y.tab.c
 LEXOUT = $(DIR)/lex.yy.c
 YACCFILE = $(DIR)/main.y
 LEXFILE = $(DIR)/main.l
+OPFILEH = $(DIR)/operation.h
+OPFILEC = $(DIR)/operation.c
 TARGET = ./main
 BJS = $(SRCS:.c=.o)
 YACC = bison
@@ -33,11 +35,12 @@ all:$(TARGET)
 
 $(TARGET):$(LEXOUT) $(YYTABC)
 ifeq ($(UNAME_S),Linux)
-	$(CC) -o$(TARGET) $(LEXOUT) $(YYTABC) $(CFLAGS_LINUX)
+	$(CC) -o$(TARGET) $(LEXOUT) $(YYTABC) $(OPFILEC) $(CFLAGS_LINUX)
 endif
 ifeq ($(UNAME_S),Darwin)
-	$(CC) -o$(TARGET) $(LEXOUT) $(YYTABC) $(CFLAGS_OSX)
+	$(CC) -o$(TARGET) $(LEXOUT) $(YYTABC) $(OPFILEC) $(CFLAGS_OSX)
 endif
+
 
 $(LEXOUT):$(LEXFILE) $(YYTABC)
 	$(LEX) -o$(LEXOUT) $(LEXFILE)
