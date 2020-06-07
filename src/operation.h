@@ -20,7 +20,7 @@ typedef struct operacoes{
 } operacoes;
 
 typedef struct pilhaOperacoes{
-	operacoes * op;
+	operacoes * operacao;
 	struct pilhaOperacoes *anterior;
 }pilhaOperacoes;
 

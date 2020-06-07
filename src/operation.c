@@ -138,18 +138,20 @@ int resolveShiftReduce(operacoes *cabeca){
 pilhaOperacoes *criarPilha(operacoes *o){
 	pilhaOperacoes *p = malloc(sizeof(pilhaOperacoes));
 	p->anterior = NULL;
-	p->op = o;
+    p->operacao = o;
+    return p;
 }
 
-void adicionaPilha(pilhaOperacoes *pilha, operacoes *op){
-	pilhaOperacoes *n = criarPilha(op);
-	n->anterior = pilha->anterior;
+void adicionaPilha(pilhaOperacoes *pilha, operacoes *operacao){
+    pilhaOperacoes *n = criarPilha(operacao);
+    n->anterior = pilha->anterior;
 	pilha->anterior = n;
 }
 
 operacoes *tiraDaPilha(pilhaOperacoes *pilha){
-	pilhaOperacoes * tmp = pilha->anterior;
-	pilha->anterior = tmp->anterior;
+    operacoes *tmp = pilha->anterior->operacao;
+    pilhaOperacoes *aux = pilha->anterior;
+    pilha->anterior = aux->anterior;
 	return tmp;
 }
 
