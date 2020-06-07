@@ -139,6 +139,7 @@ pilhaOperacoes *criarPilha(operacoes *o){
 	pilhaOperacoes *p = malloc(sizeof(pilhaOperacoes));
 	p->anterior = NULL;
 	p->op = o;
+	return p;
 }
 
 void adicionaPilha(pilhaOperacoes *pilha, operacoes *op){
@@ -147,7 +148,7 @@ void adicionaPilha(pilhaOperacoes *pilha, operacoes *op){
 	pilha->anterior = n;
 }
 
-operacoes *tiraDaPilha(pilhaOperacoes *pilha){
+pilhaOperacoes *tiraDaPilha(pilhaOperacoes *pilha){
 	pilhaOperacoes * tmp = pilha->anterior;
 	pilha->anterior = tmp->anterior;
 	return tmp;
@@ -192,7 +193,7 @@ void printaTudo(operacoes *cabeca){
         printaTudo(cabeca->dir);
     }
 }
-
+/*
 int main(){
     // operacoes* conta = criaLista(1, ADD);
     // operacoes* auxConta = populaprox(1, ADD, conta, direita);
@@ -223,4 +224,4 @@ int main(){
     printf("%d\n", resolveShiftReduce(conta));
 
     return 0;
-}
+}*/
