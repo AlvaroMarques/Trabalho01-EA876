@@ -12,12 +12,12 @@ int yylex(void);
 %token Num '+' '*' '/' '^' '(' ')' EndOF;
 %%
 S:
-  C S {printaTudo(operacaoInicial);printf("\n");}
+  C {printf("%d",resolveShiftReduce(operacaoInicial));}
   |
   ;
 C:
   E {}
-  | E C {}
+  | C E {}
   ;
 
 E:
@@ -35,7 +35,8 @@ E:
               cabeca->anterior->operacao->op = DIV;}
   | ')' '^' {tiraDaPilha(cabeca);
               cabeca->anterior->operacao->op = EXP;}
-  | ')' EndOF {}
+  | ')' EndOF {tiraDaPilha(cabeca);}
+  | ')' {tiraDaPilha(cabeca);}
   | Num EndOF {verifica($1, EOE);}
   ;
 
@@ -46,17 +47,6 @@ void yyerror(char *s) {
 int main() {
   cabeca = criarPilha(NULL);
   yyparse();
-  
-  // pilhaOperacoes *temp;
-
-  // for (temp = cabeca; temp->anterior->anterior != NULL; temp = cabeca->anterior){
-
-  // }
-
-  // printaTudo(temp->operacao);
-
-  // return 0;
-
 }
 
 void verifica(int num, operadores op){
@@ -76,8 +66,14 @@ void verifica(int num, operadores op){
     }
     comeco = 0;
     return;
-  } 
-  operacao = populaprox(num, op, tiraDaPilha(cabeca), paren);
+  }
+  if (paren == parentese){
+    operacao = populaprox(num, op, cabeca->anterior->operacao, paren);
+  }
+  else{
+    operacao = populaprox(num, op, tiraDaPilha(cabeca), paren);
+  }
+  
   adicionaPilha(cabeca, operacao);
   if (num == -1){
       paren = parentese;
