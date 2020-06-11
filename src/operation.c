@@ -49,9 +49,11 @@ int resolveShiftReduce(operacoes *cabeca){
                 return resolveShiftReduce(cabeca);
             }
             if (cabeca->dir->op == EOE){
-                cabeca->dir->num = cabeca->dir->num + cabeca->num;
-                cabeca->num = 0;
-                return cabeca->dir->num;
+                cabeca->num = cabeca->num + cabeca->dir->num;
+                operacoes *tmp = cabeca->dir;
+		cabeca->dir = tmp->dir;
+		cabeca->op = tmp->op;
+                return resolveShiftReduce(cabeca);
             }
         }
 
@@ -106,26 +108,28 @@ int resolveShiftReduce(operacoes *cabeca){
 
         else if (cabeca->op == EXP){
             if (cabeca->dir->op == ADD){
-                cabeca->dir->num = pow(cabeca->num, cabeca->dir->num);
-                cabeca->num = 1;
-                cabeca->op = MULT;
-                return resolveShiftReduce(cabeca->dir);
+                cabeca->num = pow(cabeca->num, cabeca->dir->num);
+                operacoes *tmp = cabeca->dir;
+		cabeca->dir = tmp->dir;
+		cabeca->op = tmp->op;
+                return resolveShiftReduce(cabeca);
             }
-            if (cabeca->dir->op == MULT || cabeca->dir->op == MULT){
-                cabeca->dir->num = pow(cabeca->num, cabeca->dir->num);
-                cabeca->num = 1;
-                cabeca->op = MULT;
-                return resolveShiftReduce(cabeca->dir);
+            if (cabeca->dir->op == MULT || cabeca->dir->op == DIV){
+                cabeca->num = pow(cabeca->num, cabeca->dir->num);
+                operacoes *tmp = cabeca->dir;
+		cabeca->dir = tmp->dir;
+		cabeca->op = tmp->op;
+                return resolveShiftReduce(cabeca);
             }
             if (cabeca->dir->op == EXP){
                 resolveShiftReduce(cabeca->dir);
                 return resolveShiftReduce(cabeca);
             }
             if (cabeca->dir->op == EOE){
-                cabeca->dir->num = pow(cabeca->num, cabeca->dir->num);
-                cabeca->num = 1;
-                cabeca->op = MULT;
-                return cabeca->dir->num;
+                cabeca->num = pow(cabeca->num, cabeca->dir->num);
+                operacoes *tmp = cabeca->dir;
+		cabeca->op = tmp->op;
+                return cabeca->num;
             }
         }
         else if (cabeca->op == EOE){

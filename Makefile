@@ -33,7 +33,7 @@ EXTENSIONS = *.c *.h *.in *.out *.sh
 
 all:$(TARGET)
 
-$(TARGET):$(LEXOUT) $(YYTABC)
+$(TARGET):$(LEXOUT) $(YYTABC) $(OPFILEH) $(OPFILEC)
 ifeq ($(UNAME_S),Linux)
 	$(CC) -o$(TARGET) $(LEXOUT) $(YYTABC) $(OPFILEC) $(CFLAGS_LINUX)
 endif
