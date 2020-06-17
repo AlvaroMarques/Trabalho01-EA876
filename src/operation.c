@@ -26,10 +26,10 @@ operacoes *populaprox(int valor, operadores op, operacoes *cabeca, int flag){
 }
 
 int resolveShiftReduce(operacoes *cabeca){
-    static operacoes *c = NULL;
-    if (c == NULL) c = cabeca;
-    printaTudo(c);
-    printf("\n");
+    // static operacoes *c = NULL;
+    // if (c == NULL) c = cabeca;
+    // printaTudo(c);
+    // printf("\n");
     if (cabeca->num == -1){
         cabeca->num = resolveShiftReduce(cabeca->cima);
         return resolveShiftReduce(cabeca);
@@ -55,14 +55,15 @@ int resolveShiftReduce(operacoes *cabeca){
             if (cabeca->dir->op == EOE){
                 cabeca->num = cabeca->num + cabeca->dir->num;
                 operacoes *tmp = cabeca->dir;
-		cabeca->dir = tmp->dir;
-		cabeca->op = tmp->op;
-		if (cabeca->esq != NULL && cabeca->esq->op == EXP) 
-			resolveShiftReduce(cabeca->esq);
-		else{
-			printf("aqui\n");
-               		return resolveShiftReduce(cabeca);
-		}
+                cabeca->dir = tmp->dir;
+                cabeca->op = tmp->op;
+                return resolveShiftReduce(cabeca);
+                // if (cabeca->esq != NULL && cabeca->esq->op == EXP) 
+                //     return resolveShiftReduce(cabeca->esq);
+                // else{
+                //     printf("aqui\n");
+                //     return resolveShiftReduce(cabeca);
+                // }
             }
         }
 
@@ -73,7 +74,7 @@ int resolveShiftReduce(operacoes *cabeca){
                 cabeca->op = ADD;
                 return resolveShiftReduce(cabeca->dir);
             }
-            if (cabeca->dir->op == MULT || cabeca->dir->op == MULT){
+            if (cabeca->dir->op == MULT || cabeca->dir->op == DIV){
                 cabeca->dir->num = cabeca->num * cabeca->dir->num;
                 cabeca->num = 0;
                 cabeca->op = ADD;
@@ -97,7 +98,7 @@ int resolveShiftReduce(operacoes *cabeca){
                 cabeca->op = ADD;
                 return resolveShiftReduce(cabeca->dir);
             }
-            if (cabeca->dir->op == MULT || cabeca->dir->op == MULT){
+            if (cabeca->dir->op == MULT || cabeca->dir->op == DIV){
                 cabeca->dir->num = cabeca->num / cabeca->dir->num;
                 cabeca->num = 0;
                 cabeca->op = ADD;
@@ -119,16 +120,28 @@ int resolveShiftReduce(operacoes *cabeca){
             if (cabeca->dir->op == ADD){
                 cabeca->num = pow(cabeca->num, cabeca->dir->num);
                 operacoes *tmp = cabeca->dir;
-		cabeca->dir = tmp->dir;
-		cabeca->op = tmp->op;
-                return resolveShiftReduce(cabeca);
+		        cabeca->dir = tmp->dir;
+		        cabeca->op = tmp->op;
+                if (cabeca->esq != NULL && cabeca->esq->op == EXP){
+                    return resolveShiftReduce(cabeca->esq);
+                }
+                else{
+                    return resolveShiftReduce(cabeca);
+                }
+                //return resolveShiftReduce(cabeca);
             }
             if (cabeca->dir->op == MULT || cabeca->dir->op == DIV){
                 cabeca->num = pow(cabeca->num, cabeca->dir->num);
                 operacoes *tmp = cabeca->dir;
-		cabeca->dir = tmp->dir;
-		cabeca->op = tmp->op;
-                return resolveShiftReduce(cabeca);
+		        cabeca->dir = tmp->dir;
+		        cabeca->op = tmp->op;
+                if (cabeca->esq != NULL && cabeca->esq->op == EXP){
+                    return resolveShiftReduce(cabeca->esq);
+                }
+                else{
+                    return resolveShiftReduce(cabeca);
+                }
+                //return resolveShiftReduce(cabeca);
             }
             if (cabeca->dir->op == EXP){
                 resolveShiftReduce(cabeca->dir);
@@ -137,7 +150,7 @@ int resolveShiftReduce(operacoes *cabeca){
             if (cabeca->dir->op == EOE){
                 cabeca->num = pow(cabeca->num, cabeca->dir->num);
                 operacoes *tmp = cabeca->dir;
-		cabeca->op = tmp->op;
+		        cabeca->op = tmp->op;
                 return cabeca->num;
             }
         }
@@ -145,7 +158,7 @@ int resolveShiftReduce(operacoes *cabeca){
             return cabeca->num;
         }
     }
-    return -2;
+    return -5;
 }
 
 pilhaOperacoes *criarPilha(operacoes *o){
