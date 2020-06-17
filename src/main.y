@@ -12,7 +12,7 @@ int yylex(void);
 %token Num '+' '*' '/' '^' '(' ')' EndOF;
 %%
 S:
-  C {printf("%d",resolveShiftReduce(operacaoInicial));}
+  C {printaTudo(operacaoInicial) ;printf("%d",resolveShiftReduce(operacaoInicial));}
   |
   ;
 C:

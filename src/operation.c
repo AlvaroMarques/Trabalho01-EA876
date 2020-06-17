@@ -26,6 +26,10 @@ operacoes *populaprox(int valor, operadores op, operacoes *cabeca, int flag){
 }
 
 int resolveShiftReduce(operacoes *cabeca){
+    static operacoes *c = NULL;
+    if (c == NULL) c = cabeca;
+    printaTudo(c);
+    printf("\n");
     if (cabeca->num == -1){
         cabeca->num = resolveShiftReduce(cabeca->cima);
         return resolveShiftReduce(cabeca);
@@ -53,7 +57,12 @@ int resolveShiftReduce(operacoes *cabeca){
                 operacoes *tmp = cabeca->dir;
 		cabeca->dir = tmp->dir;
 		cabeca->op = tmp->op;
-                return resolveShiftReduce(cabeca);
+		if (cabeca->esq != NULL && cabeca->esq->op == EXP) 
+			resolveShiftReduce(cabeca->esq);
+		else{
+			printf("aqui\n");
+               		return resolveShiftReduce(cabeca);
+		}
             }
         }
 
