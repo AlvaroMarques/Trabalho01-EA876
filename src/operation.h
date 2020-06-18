@@ -17,6 +17,7 @@ typedef struct operacoes{
     struct operacoes *dir;
     struct operacoes *esq;
     struct operacoes *cima;
+    int reduced;
 } operacoes;
 
 typedef struct pilhaOperacoes{

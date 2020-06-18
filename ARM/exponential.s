@@ -1,6 +1,6 @@
 start: ; exemplo de uso
-	mov A, 5
-	mov B, 3
+	mov A, x
+	mov B, y
 	call exp
 	hlt
 
