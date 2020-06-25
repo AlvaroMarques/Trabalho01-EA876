@@ -47,6 +47,15 @@ void yyerror() {
 int main() {
   cabeca = criarPilha(NULL);
   yyparse();
+  printf("\n");
+  int c;
+  FILE *file;
+  file = fopen("./src/exponential.s", "r");
+  if (file) {
+      while ((c = getc(file)) != EOF)
+  	putchar(c);
+      fclose(file);
+  }
 }
 
 void verifica(int num, operadores op){
