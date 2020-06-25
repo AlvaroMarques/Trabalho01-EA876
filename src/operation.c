@@ -108,6 +108,7 @@ int resolveShiftReduce(operacoes *cabeca){
 			if (cabeca->dir->op == EXP){
 				cabeca->dir->reduced = 1;
 				resolveShiftReduce(cabeca->dir);
+				cabeca->dir->reduced = 1;
 				return resolveShiftReduce(cabeca);
 			}
 			if (cabeca->dir->op == EOE){
@@ -146,7 +147,9 @@ int resolveShiftReduce(operacoes *cabeca){
 				return resolveShiftReduce(cabeca);
 			}
 			if (cabeca->dir->op == EXP){
+				cabeca->dir->reduced = 1;
 				resolveShiftReduce(cabeca->dir);
+				cabeca->dir->reduced = 1;
 				return resolveShiftReduce(cabeca);
 			}
 			if (cabeca->dir->op == EOE){
@@ -192,18 +195,32 @@ int resolveShiftReduce(operacoes *cabeca){
 				}
 			}
 			if (cabeca->dir->op == MULT || cabeca->dir->op == DIV){
-				printf("%d ^ %d = %d\n", cabeca->num, cabeca->dir->num, (int) pow(cabeca->num,cabeca->dir->num));
-				cabeca->num = (int) pow(cabeca->num, cabeca->dir->num);
-				operacoes *tmp = cabeca->dir;
-				cabeca->dir = tmp->dir;
-				cabeca->op = tmp->op;
 				if (cabeca->esq != NULL && cabeca->esq->op == EXP){
+					if (cabeca->dir->reduced){
+						printf("POP B\nPOP A\nCALL exp\nPUSH A\n");
+					}else{
+						printf("MOV A, %d\nMOV B, %d\nCALL exp\nPUSH A\n", cabeca->num, cabeca->dir->num);
+					}
+					cabeca->num = (int) pow(cabeca->num, cabeca->dir->num);
+					operacoes *tmp = cabeca->dir;
+					cabeca->dir = tmp->dir;
+					cabeca->op = tmp->op;
+					cabeca->reduced = 1;
 					return resolveShiftReduce(cabeca->esq);
 				}
 				else{
+					if (cabeca->dir->reduced){
+						printf("POP B\nPOP A\nCALL exp\nPUSH A\n");
+					}else{
+						printf("MOV A, %d\nMOV B, %d\nCALL exp\nPUSH A\n", cabeca->num, cabeca->dir->num);
+					}
+					cabeca->num = (int) pow(cabeca->num, cabeca->dir->num);
+					operacoes *tmp = cabeca->dir;
+					cabeca->dir = tmp->dir;
+					cabeca->op = tmp->op;
+					cabeca->reduced = 1;
 					return resolveShiftReduce(cabeca);
 				}
-				//return resolveShiftReduce(cabeca);
 			}
 			if (cabeca->dir->op == EXP){
 				printf("MOV A, %d\nPUSH A\n", cabeca->num);
