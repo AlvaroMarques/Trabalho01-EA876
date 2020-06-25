@@ -63,9 +63,9 @@ int resolveShiftReduce(operacoes *cabeca){
 				return resolveShiftReduce(cabeca);
 			}
 			if (cabeca->dir->op == EXP){
-				printf("MOV A, %d\nPUSH A\n", cabeca->dir->num);
 				cabeca->dir->reduced = 1;
 				resolveShiftReduce(cabeca->dir);
+				cabeca->dir->reduced = 1;
 				return resolveShiftReduce(cabeca);
 			}
 			if (cabeca->dir->op == EOE){
@@ -181,11 +181,7 @@ int resolveShiftReduce(operacoes *cabeca){
 					if (cabeca->dir->reduced){
 						printf("POP B\nPOP A\nCALL exp\nPUSH A\n");
 					}else{
-						if (cabeca->esq == NULL){
-							printf("MOV A, %d\nMOV B, %d\nCALL exp\nPUSH A\n", cabeca->num, cabeca->dir->num);
-						}else{
-							printf("POP A\nMOV B, %d\nCALL exp\nPUSH A\n",cabeca->dir->num);
-						}
+						printf("MOV A, %d\nMOV B, %d\nCALL exp\nPUSH A\n", cabeca->num, cabeca->dir->num);
 					}
 					cabeca->num = (int) pow(cabeca->num, cabeca->dir->num);
 					operacoes *tmp = cabeca->dir;
