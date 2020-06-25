@@ -32,6 +32,8 @@ int resolveShiftReduce(operacoes *cabeca){
 		printf("MOV A, %d\nPUSH A\n", cabeca->num);
 		c = cabeca;
 	}
+	//printaTudo(c);
+	//printf("\n");
 	if (cabeca->num == -1){
 		cabeca->num = resolveShiftReduce(cabeca->cima);
 		return resolveShiftReduce(cabeca);
@@ -87,8 +89,7 @@ int resolveShiftReduce(operacoes *cabeca){
 				cabeca->num = cabeca->num * cabeca->dir->num;
 				cabeca->op = cabeca->dir->op;
 				cabeca->dir = cabeca->dir->dir;
-				cabeca->dir->reduced = 1;
-				return resolveShiftReduce(cabeca->dir);
+				return resolveShiftReduce(cabeca);
 			}
 			if (cabeca->dir->op == MULT || cabeca->dir->op == DIV){
 				if (cabeca->dir->reduced){
@@ -99,7 +100,7 @@ int resolveShiftReduce(operacoes *cabeca){
 				cabeca->num = cabeca->num * cabeca->dir->num;
 				cabeca->op = cabeca->dir->op;
 				cabeca->dir = cabeca->dir->dir;
-				return resolveShiftReduce(cabeca->dir);
+				return resolveShiftReduce(cabeca);
 			}
 			if (cabeca->dir->op == EXP){
 				cabeca->dir->reduced = 1;
@@ -120,29 +121,41 @@ int resolveShiftReduce(operacoes *cabeca){
 		}
 		else if (cabeca->op == DIV){
 			if (cabeca->dir->op == ADD){
-				printf("%d / %d = %d\n", cabeca->num, cabeca->dir->num, cabeca->num / cabeca->dir->num);
-				cabeca->dir->num = cabeca->num / cabeca->dir->num;
-				cabeca->num = 0;
-				cabeca->op = ADD;
-				return resolveShiftReduce(cabeca->dir);
+				if (cabeca->dir->reduced){
+					printf("POP B\nPOP A\nMUL B\nPUSH A\n");
+				}else{
+					printf("POP A\nDIV %d\nPUSH A\n", cabeca->dir->num);
+				}
+				cabeca->num = cabeca->num / cabeca->dir->num;
+				cabeca->op = cabeca->dir->op;
+				cabeca->dir = cabeca->dir->dir;
+				return resolveShiftReduce(cabeca);
 			}
 			if (cabeca->dir->op == MULT || cabeca->dir->op == DIV){
-				printf("%d / %d = %d\n", cabeca->num, cabeca->dir->num, cabeca->num / cabeca->dir->num);
-				cabeca->dir->num = cabeca->num / cabeca->dir->num;
-				cabeca->num = 0;
-				cabeca->op = ADD;
-				return resolveShiftReduce(cabeca->dir);
+				if (cabeca->dir->reduced){
+					printf("POP B\nPOP A\nMUL B\nPUSH A\n");
+				}else{
+					printf("POP A\nDIV %d\nPUSH A\n", cabeca->dir->num);
+				}
+				cabeca->num = cabeca->num / cabeca->dir->num;
+				cabeca->op = cabeca->dir->op;
+				cabeca->dir = cabeca->dir->dir;
+				return resolveShiftReduce(cabeca);
 			}
 			if (cabeca->dir->op == EXP){
 				resolveShiftReduce(cabeca->dir);
 				return resolveShiftReduce(cabeca);
 			}
 			if (cabeca->dir->op == EOE){
-				printf("%d / %d = %d\n", cabeca->num, cabeca->dir->num, cabeca->num / cabeca->dir->num);
-				cabeca->dir->num = cabeca->num / cabeca->dir->num;
-				cabeca->num = 0;
-				cabeca->op = ADD;
-				return cabeca->dir->num;
+				if (cabeca->dir->reduced){
+					printf("POP B\nPOP A\nMUL B\nPUSH A\n");
+				}else{
+					printf("POP A\nDIV %d\nPUSH A\n", cabeca->dir->num);
+				}
+				cabeca->num = cabeca->num / cabeca->dir->num;
+				cabeca->op = cabeca->dir->op;
+				cabeca->dir = cabeca->dir->dir;
+				return cabeca->num;
 			}
 		}
 
@@ -188,6 +201,7 @@ int resolveShiftReduce(operacoes *cabeca){
 			}
 		}
 		else if (cabeca->op == EOE){
+			cabeca->reduced = 0;
 			return cabeca->num;
 		}
 	}
