@@ -3,6 +3,7 @@
 #include <math.h>
 #include "operation.h"
 
+//recebe o valor e o operador iniciais, retorna o comeca da lista criada
 operacoes *criaLista(int valor, operadores op){
 	operacoes *vetor = malloc(sizeof(operacoes));
 	vetor->num = valor;
@@ -11,10 +12,13 @@ operacoes *criaLista(int valor, operadores op){
 	vetor->dir = NULL;
 	vetor->esq = NULL;
 	vetor->reduced = 0;
-	vetor->red_exp = 0;
 	return vetor;
 }
 
+//recebe o valor, o operador, o vetor de operacoes e a flag do parentese
+//retorna o nó criado
+//a ideia é que se flag = parentese, a inves de continuarmos a escrever a operacao em cabeca->dir,
+//escrevemos em cabeca->cima, como se criassemos uma branch nova pra resolver o conteúdo do parenteses
 operacoes *populaprox(int valor, operadores op, operacoes *cabeca, int flag){
 	if ((flag) == parentese ){
 		cabeca->cima = criaLista(valor, op);
@@ -26,17 +30,21 @@ operacoes *populaprox(int valor, operadores op, operacoes *cabeca, int flag){
 		return cabeca->dir;
 	}
 }
-
+//aqui começa o Shift-Reduce
+//A ideia aqui é olhar sempre pra operacao que eu estou e pra proxima(dir)
+//E tomar uma decisão baseada nisso
 int resolveShiftReduce(operacoes *cabeca){
 	static operacoes *c = NULL;
 	static int redux = 0;
+    //essa variavel redux = 1 serve pra sabermos quando há um inicio de parentese
+    //ja que o codigo em ARM é um pouco diferente caso estejamos no começo
 	if (c == NULL || redux == 1) {
 		redux = 0;
 		if ((cabeca->op != EXP && cabeca->num != -1))
 			printf("MOV A, %d\nPUSH A\n", cabeca->num);
 		c = cabeca;
 	}
-	//printaTudo(c);printf("\n");
+    //cabeça->num ser -1 quer dizer que é o comeco de um parentese
 	if (cabeca->num == -1){
 		redux = 1;
 		cabeca->num = resolveShiftReduce(cabeca->cima);
@@ -44,11 +52,14 @@ int resolveShiftReduce(operacoes *cabeca){
 		return resolveShiftReduce(cabeca);
 	}
 	else{
+        //isso aqui quer dizer que a proxima operacao terá um parentese, e prepara o codigo pra isso
 		if (cabeca->dir != NULL && cabeca->dir->num == -1){
 			redux = 1;
 			cabeca->dir->num = resolveShiftReduce(cabeca->dir->cima);
 			cabeca->dir->reduced = 1;
 		}
+        //A partir daqui, explicaremos no adendo 2 do ReadMe
+        //ADD
 		if (cabeca->op == ADD){
 			if (cabeca->dir->op == ADD){
 				if (cabeca->dir->reduced){
@@ -88,7 +99,7 @@ int resolveShiftReduce(operacoes *cabeca){
 				return cabeca->num;
 			}
 		}
-
+        //MULT
 		else if (cabeca->op == MULT){
 			if (cabeca->dir->op == ADD){
 				if (cabeca->dir->reduced){
@@ -130,6 +141,7 @@ int resolveShiftReduce(operacoes *cabeca){
 				return cabeca->num;
 			}
 		}
+        //DIV
 		else if (cabeca->op == DIV){
 			if (cabeca->dir->op == ADD){
 				if (cabeca->dir->reduced){
@@ -171,7 +183,7 @@ int resolveShiftReduce(operacoes *cabeca){
 				return cabeca->num;
 			}
 		}
-
+        //EXP
 		else if (cabeca->op == EXP){
 			if (cabeca->dir->op == ADD){
 				if (cabeca->esq != NULL && cabeca->esq->op == EXP){
@@ -231,7 +243,6 @@ int resolveShiftReduce(operacoes *cabeca){
 			}
 			if (cabeca->dir->op == EXP){
 				printf("MOV A, %d\nPUSH A\n", cabeca->num);
-				cabeca->dir->red_exp = 1;
 				cabeca->dir->reduced = 1;
 				resolveShiftReduce(cabeca->dir);
 				return resolveShiftReduce(cabeca);
@@ -262,7 +273,8 @@ int resolveShiftReduce(operacoes *cabeca){
 			return cabeca->num;
 		}
 	}
-	return -5;
+    //Esse -2 aqui nunca vai chegar, mas era uma forma da gente testar quando dava erro
+	return -2;
 }
 
 pilhaOperacoes *criarPilha(operacoes *o){
@@ -305,7 +317,8 @@ char printaOperador(operadores op){
 		break;
 	}
 }
-
+//essa funcao recebe a lista ligada de todas as operacoes e printa recursivamente
+//é uma funcao de debug
 void printaTudo(operacoes *cabeca){
 	if (cabeca == NULL){
 		return;
@@ -325,34 +338,3 @@ void printaTudo(operacoes *cabeca){
 	}
 }
 
-// int main(){
-//	 // operacoes* conta = criaLista(1, ADD);
-//	 // operacoes* auxConta = populaprox(1, ADD, conta, direita);
-//	 // auxConta = populaprox(1, EOE, auxConta, direita);
-
-//	 // operacoes* conta = criaLista(-1, MULT);
-//	 // operacoes* auxConta = populaprox(2, ADD, conta, parentese);
-//	 // auxConta = populaprox(5, EOE, auxConta, direita);
-//	 // auxConta = populaprox(-1, EOE, conta, direita);
-//	 // auxConta = populaprox(3, EXP, auxConta, parentese);
-//	 // auxConta = populaprox(2, EOE, auxConta, direita);
-
-//	 // operacoes* conta = criaLista(-1, ADD);
-//	 // operacoes* auxConta = populaprox(1, EOE, conta, parentese);
-//	 // auxConta = populaprox(-1, EOE, conta, direita);
-//	 // auxConta = populaprox(1, EOE, auxConta, parentese);
-
-//	 operacoes* conta = criaLista(-1, EOE);
-//	 operacoes* auxConta = populaprox(-1, EOE, conta, parentese);
-//	 auxConta = populaprox(-1, EOE, auxConta, parentese);
-//	 auxConta = populaprox(-1, EOE, auxConta, parentese);
-//	 auxConta = populaprox(-1, EOE, auxConta, parentese);
-//	 auxConta = populaprox(5, ADD, auxConta, parentese);
-//	  auxConta = populaprox(5, EOE, auxConta, direita);
-
-//	 printaTudo(conta);
-//	 printf("\n");
-//	 printf("%d\n", resolveShiftReduce(conta));
-
-//	 return 0;
-// }
