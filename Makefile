@@ -1,7 +1,7 @@
 # Macros para compilacao
 CC = gcc
 UNAME_S := $(shell uname -s)
-CFLAGS_LINUX = -Wextra -lfl
+CFLAGS_LINUX = -Wextra -lfl -lm
 CFLAGS_OSX = -Wextra -ll
 DIR = src
 FILENAME = $(DIR)/main.c

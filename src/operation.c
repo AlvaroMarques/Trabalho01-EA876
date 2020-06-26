@@ -74,7 +74,7 @@ int resolveShiftReduce(operacoes *cabeca){
 				return resolveShiftReduce(cabeca);
 			}
 			if (cabeca->dir->op == MULT || cabeca->dir->op == DIV){
-				printf("MOV A, %d\nPUSH A\n", cabeca->dir->num);
+		//		printf("MOV A, %d\nPUSH A\n", cabeca->dir->num);
 				cabeca->dir->reduced = 1;
 				resolveShiftReduce(cabeca->dir);
 				cabeca->dir->reduced = 1;
