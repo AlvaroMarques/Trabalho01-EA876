@@ -49,6 +49,7 @@ int main() {
   yyparse();
   printf("\n");
   int c;
+  //essa file é a funcao exponencial ema arm feita em outro arquivo
   FILE *file;
   file = fopen("./src/exponential.s", "r");
   if (file) {
@@ -64,9 +65,11 @@ void verifica(int num, operadores op){
   static int comeco = 1;
   static int paren = parentese;
 
+  //aqui, a gente precisa de um marco pro inicio da pilha, pra saber quando criar a lista
   if (comeco == 1){
     operacaoInicial = criaLista(num, op);
     adicionaPilha(cabeca, operacaoInicial);
+    //o num ser = -1 quer dizer que a gente vai iniciar um parentese
     if (num == -1){
       paren = parentese;
     }
@@ -76,13 +79,14 @@ void verifica(int num, operadores op){
     comeco = 0;
     return;
   }
+  //Leia o adendo 1 do readme pra saber como funciona melhor essa lógica
   if (paren == parentese){
     operacao = populaprox(num, op, cabeca->anterior->operacao, paren);
   }
   else{
     operacao = populaprox(num, op, tiraDaPilha(cabeca), paren);
   }
-  
+  //aqui adiciona na pilha quando não é o comeco
   adicionaPilha(cabeca, operacao);
   if (num == -1){
       paren = parentese;
