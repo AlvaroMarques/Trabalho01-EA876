@@ -2,7 +2,7 @@
 ### Victor Toon de Araújo - 225231
 ### Álvaro Marques Macêdo - 212466
 
-Neste readme vamos explicar algumas partes do ccódigo e por onde começar a ler. A ordem recomendada de leitura dos arquivos pra entender como funciona, seria: ler primeiro o operation.h, depois a main.y e a main.i, e por último a operation.c
+Neste readme vamos explicar algumas partes do ccódigo e por onde começar a ler. A ordem recomendada de leitura dos arquivos pra entender como funciona, seria: ler primeiro o operation.h, depois a main.y e a main.l, e por último a operation.c
 
 A ideia aqui é que fizemos uma yacc bem simples, já que implementamos o shift reduce em C usando listas ligadas. Logo abaixo, colocaremos dois adendos aos quais fazemos referencia nos comentários do código
 
