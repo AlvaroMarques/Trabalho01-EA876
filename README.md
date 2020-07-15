@@ -16,10 +16,10 @@ Como exemplo temos a expressão 5 + ( 3 + 2 ) ^ 7, da forma que estruturamos ter
 
 Resolvemos a expressão (e também escrevemos o código assembly) de uma forma recursiva, começando pelo primeiro elemento da operação e indo do sentido esquerda-direita, quando encontramos um parêntese (identificado pelo número `-1`) chamos a mesma função para resolver e escrever o assembly da sua parte de cima, e depois prosseguimos para a direita do elemento do parêntese caso ainda exista expressão. As etapas da resolução da expressão acima seriam: 
 
-![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/Res1Exp.png)
-![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/Res2Exp.png)
-![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/Res3Exp.png)
-![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/Res4Exp.png)
+![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/Res1Exp.png) </br>
+![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/Res2Exp.png) </br>
+![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/Res3Exp.png) </br>
+![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/Res4Exp.png) </br>
 
 ## Adendo 1:
 A ideia de ter uma pilha com todas as operações é que podemos depois chamar o nosso algoritmo de shift reduce pra pilha toda. Porém, isso gera um leve problema:
