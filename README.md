@@ -76,3 +76,9 @@ Pra entendermos melhor, vamos imaginar a seguinte operação:
 
 Como a prioridade do MULT é maior, chamamos a função pra `cabeca->dir`, pra resolvermos primeiro o MULT
 No retorno dessa chamada, poderemos somar 1 com o reduzido de `2*3`.
+
+## Agradecimentos 
+
+* D$ LUCKHAOS
+* Gay Es Paint (https://jspaint.app/)
+* Lucas (Bertoloto) Bertoloto
