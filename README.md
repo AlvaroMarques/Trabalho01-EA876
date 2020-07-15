@@ -21,17 +21,16 @@ Se op1 for + e op 2 não for +, temos que resolver Y op2 Z pra depois retornar a
 
 E assim por diante, seguindo a seguinte tabela:
 
-//colocar Tabela-prioridade aqui
+![alt text]:(Tabela-Prioridade.png "Tabela Prioridade")
 
 A interpretação dessa tabela é que se oo resultado for 1, op1 pode ser resolvido, e se for 0, temos que resolver op2 primeiro, o que gera essa relação de prioridade entre as operações.
 
-O que fazemos nessa parte da função é justamente analisar op1 e op2, ou, cabeca->op e cabeca->dir->op, fazer operações com base nisso.
+O que fazemos nessa parte da função é justamente analisar op1 e op2, ou, `cabeca->op` e `cabeca->dir->op`, fazer operações com base nisso.
 
 Pra entendermos melhor, vamos imaginar a seguinte operação:
-1+2*3
+* `1+2*3`
+* `cabeca->op` é inicialmente ADD, pq estamos olhando o 1 primeiro
+* `cabeca->dir->op` é MULT
 
-cabeca->op é inicialmente ADD, pq estamos olhando o 1 primeiro
-cabeca->dir->op é MULT
-
-Como a prioridade do MULT é maior, chamamos a função pra cabeca->dir, pra resolvermos primeiro o MULT
-No retorno dessa chamada, poderemos somar 1 com o reduzido de 2*3.
+Como a prioridade do MULT é maior, chamamos a função pra `cabeca->dir`, pra resolvermos primeiro o MULT
+No retorno dessa chamada, poderemos somar 1 com o reduzido de `2*3`.
