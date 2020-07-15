@@ -10,16 +10,42 @@ A ideia aqui é que fizemos uma yacc bem simples, já que implementamos o shift 
 
 Utilizamos listas duplamete ligadas parar estruturar a expressão recebida, da forma que cada elemento da lista possui um número, um operador, que representa um número da operação e o seu operador subsequente, uma referência ao elemento da direita, da esquerda, e para "cima". Caso tenha um parêntese na expressão, o começo do parêntese vai contar como um elemento que possui o número -1, o operador como o operador subsequente ao fim do parêntese, e uma referência para o ponteiro de "cima", que vai ligar ao primeiro elemento da expressão dentro do parêntese. </br>
 No final da expressão (ou final de uma expressão de parêntese) temos último número da expressão e o operador EOE (End of Expression), que indica que a expressão acabou. </br>
-Como exemplo temos a expressão 5 + ( 3 + 2 ) ^ 7, da forma que estruturamos teríamos: 
+Como exemplo temos a expressão 5 + ( 3 + 2 ) ^ 7, da forma que estruturamos teríamos: </br>
 
 ![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/EstruturaOperacao.png)
 
-Resolvemos a expressão (e também escrevemos o código assembly) de uma forma recursiva, começando pelo primeiro elemento da operação e indo do sentido esquerda-direita, quando encontramos um parêntese (identificado pelo número `-1`) chamos a mesma função para resolver e escrever o assembly da sua parte de cima, e depois prosseguimos para a direita do elemento do parêntese caso ainda exista expressão. As etapas da resolução da expressão acima seriam: 
+Resolvemos a expressão (e também escrevemos o código assembly) de uma forma recursiva, começando pelo primeiro elemento da operação e indo do sentido esquerda-direita, quando encontramos um parêntese (identificado pelo número `-1`) chamos a mesma função para resolver e escrever o assembly da sua parte de cima, e depois prosseguimos para a direita do elemento do parêntese caso ainda exista expressão. As etapas da resolução da expressão acima seriam: </br>
 
 ![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/Res1Exp.png) </br>
 ![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/Res2Exp.png) </br>
 ![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/Res3Exp.png) </br>
 ![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/Res4Exp.png) </br>
+
+## Construção de uma Expressão
+
+Para transforar a string de entrada de uma expressão (como "5 + ( 3 + 2 ) ^ 7") na estrutura apresentada assim utilizamos uma pilha de referências, na qual temos o primeiro elemtno na base dessa pilha e os elementos subsequentes acima dele, não excluímos elementos da pilha a não ser que estejam dentro de parênteses, o porquê disso está explicado no adendo 1. Para casos fora de parêntese, cada elemento colocado na pilha é referenciado como a direita do elemento de baixo e o de baixo é referenciado como a esquerda desse elemento. </br>
+As etapas da criação de uma expressão "5 + (3 + 2) ^ 7" seriam: </br>
+* Pilha: 
+	* ![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/pilha1Exp.png) </br>
+* Expressão:
+	* ![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/exp1Exp.png) </br>
+* Pilha: 
+	* ![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/pilha2Exp.png) </br>
+* Expressão:
+	* ![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/exp2Exp.png) </br>
+* Pilha: 
+	* ![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/pilha3Exp.png) </br>
+* Expressão:
+	* ![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/exp3Exp.png) </br>
+* Pilha: 
+	* ![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/pilha4Exp.png) </br>
+* Expressão:
+	* ![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/exp4Exp.png) </br>
+* Pilha: 
+	* ![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/pilha5Exp.png) </br>
+* Expressão:
+	* ![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/exp5Exp.png) </br>
+	 
 
 ## Adendo 1:
 A ideia de ter uma pilha com todas as operações é que podemos depois chamar o nosso algoritmo de shift reduce pra pilha toda. Porém, isso gera um leve problema:
