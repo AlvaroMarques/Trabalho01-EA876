@@ -6,17 +6,26 @@ Neste readme vamos explicar algumas partes do ccódigo e por onde começar a ler
 
 A ideia aqui é que fizemos uma yacc bem simples, já que implementamos o shift reduce em C usando listas ligadas. Logo abaixo, colocaremos dois adendos aos quais fazemos referencia nos comentários do código
 
+## Estrutura de uma Expressão 
+
+Utilizamos listas duplamete ligadas parar estruturar a expressão recebida, da forma que cada elemento da lista possui um número, um operador, que representa um número da operação e o seu operador subsequente, uma referência ao elemento da direita, da esquerda, e para "cima". Caso tenha um parêntese na expressão, o começo do parêntese vai contar como um elemento que possui o número -1, o operador como o operador subsequente ao fim do parêntese, e uma referência para o ponteiro de "cima", que vai ligar ao primeiro elemento da expressão dentro do parêntese. </br>
+No final da expressão (ou final de uma expressão de parêntese) temos último número da expressão e o operador EOE (End of Expression), que indica que a expressão acabou. </br>
+Como exemplo temos a expressão 5 + ( 3 + 2 ) ^ 7, da forma que estruturamos teríamos: 
+
+![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/EstruturaOperacao.png)
+
+Resolvemos a expressão (e também escrevemos o código assembly) de uma forma recursiva, começando pelo primeiro elemento da operação e indo do sentido esquerda-direita, quando encontramos um parêntese (identificado pelo número `-1`) chamos a mesma função para resolver e escrever o assembly da sua parte de cima, e depois prosseguimos para a direita do elemento do parêntese caso ainda exista expressão. As etapas da resolução da expressão acima seriam: 
+
+![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/Res1Exp.png)
+![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/Res2Exp.png)
+![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/Res3Exp.png)
+![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/Res4Exp.png)
+
 ## Adendo 1:
 A ideia de ter uma pilha com todas as operações é que podemos depois chamar o nosso algoritmo de shift reduce pra pilha toda. Porém, isso gera um leve problema:
 
 Quando temos, por exemplo, X + (Y + Z) + W, o W tem que guardar a referencia do '(', que é o operador que vem depois do X, como se tivessemos X <- ( <- W, e pra isso, temos que remover o A e o B da pilha, por isso removemos nessa função. A cada inserção dentro do parenteses, removemos a anterior, então quando colocamos B, removemos A, por isso desempilhamos apenas 1 vez pra fazer W -> (.
 
-## Estrutura de uma Expressão 
-
-Utilizamos listas duplamete ligadas parar estruturar a expressão recebida, da forma que cada elemento da lista possui um número, um operador, que representa um número da operação e o seu operador subsequente, uma referência ao elemento da direita, da esquerda, e para "cima". Caso tenha um parêntese na expressão, o começo do parêntese vai contar como um elemento que possui o número -1, o operador como o operador subsequente ao fim do parêntese, e uma referência para o ponteiro de "cima", que vai ligar ao primeiro elemento da expressão dentro do parêntese. </br>
-Como exemplo temos a expressão 5 + ( 3 x 2 ) ^ 7, da forma que estruturamos teríamos: 
-
-![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/EstruturaOperacao.png)
 
 ## Adendo 2:
 Essa parte da função é o núcleo do Shift-Reduce. Sabemos que o Shift-reduce tem ordens de prioridade, tomaremos o seguinte exemplo:
@@ -28,7 +37,7 @@ Se op1 for + e op 2 não for +, temos que resolver Y op2 Z pra depois retornar a
 
 E assim por diante, seguindo a seguinte tabela:
 
-![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/Tabela-prioridade.png)
+![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/img/Tabela-prioridade.png)
 
 A interpretação dessa tabela é que se oo resultado for 1, op1 pode ser resolvido, e se for 0, temos que resolver op2 primeiro, o que gera essa relação de prioridade entre as operações.
 
