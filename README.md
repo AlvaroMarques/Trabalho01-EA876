@@ -16,7 +16,7 @@ Quando temos, por exemplo, X + (Y + Z) + W, o W tem que guardar a referencia do 
 Utilizamos listas duplamete ligadas parar estruturar a expressão recebida, da forma que cada elemento da lista possui um número, um operador, que representa um número da operação e o seu operador subsequente, uma referência ao elemento da direita, da esquerda, e para "cima". Caso tenha um parêntese na expressão, o começo do parêntese vai contar como um elemento que possui o número -1, o operador como o operador subsequente ao fim do parêntese, e uma referência para o ponteiro de "cima", que vai ligar ao primeiro elemento da expressão dentro do parêntese. </br>
 Como exemplo temos a expressão 5 + ( 3 x 2 ) ^ 7, da forma que estruturamos teríamos: 
 
-![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/Estrutura-Operacao.png)
+![alt text](https://raw.githubusercontent.com/AlvaroMarques/Trabalho01-EA876/master/EstruturaOperacao.png)
 
 ## Adendo 2:
 Essa parte da função é o núcleo do Shift-Reduce. Sabemos que o Shift-reduce tem ordens de prioridade, tomaremos o seguinte exemplo:
