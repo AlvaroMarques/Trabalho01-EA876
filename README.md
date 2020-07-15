@@ -21,7 +21,7 @@ Se op1 for + e op 2 não for +, temos que resolver Y op2 Z pra depois retornar a
 
 E assim por diante, seguindo a seguinte tabela:
 
-![alt text]:(./Tabela-Prioridade.png "Tabela Prioridade")
+![Tabela Prioridade]:(./Tabela-Prioridade.png)
 
 A interpretação dessa tabela é que se oo resultado for 1, op1 pode ser resolvido, e se for 0, temos que resolver op2 primeiro, o que gera essa relação de prioridade entre as operações.
 
